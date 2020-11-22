@@ -12,7 +12,8 @@ Memo Test:
 const $divs = document.querySelectorAll(".cuadro");
 const $main = document.querySelector(".main");
 let divs = [];
-contador = 0
+let contador = 0;
+let match = 0;
 const colors = [
   "rojo",
   "verde",
@@ -32,7 +33,7 @@ function juego() {
   colores = colores.concat(
     colores.sort(() => {
       return Math.random() - 0.5;
-    })
+    }),
   );
 
   asignarColores(colores);
@@ -41,18 +42,20 @@ function juego() {
     if (e.target.classList.contains("cuadro")) {
       mostrarElemento(e.target);
       divs.push(e.target);
-      if (divs.length >= 2) {
+      console.log(divs, divs.length);
+      if (divs.length === 2) {
         compararDivs(divs[0], divs[1]);
         divs = [];
       }
-    } else if (document.querySelectorAll(".blocked").length == 16) {
-      console.log("yay");
-      return null;
+      if (match === 8) {
+        document.querySelector(
+          "body > div",
+        ).innerHTML = `<div class="alert alert-primary align-self-center">Has ganado yay!</div>`;
+      }
+      console.log(match);
     }
-  })
-  
+  });
 }
-
 function todoOculto() {
   $divs.forEach((element) => {
     element.style.backgroundColor = "null";
@@ -83,10 +86,13 @@ function compararDivs(div1, div2) {
   if (div1.className === div2.className) {
     div1.parentElement.classList.add("blocked");
     div2.parentElement.classList.add("blocked");
-    contador ++
+    contador++;
+    match++;
   } else {
-    ocultarElemento(div1);
-    ocultarElemento(div2);
+    setTimeout(() => {
+      ocultarElemento(div1);
+      ocultarElemento(div2);
+    }, 500);
   }
 }
 
